@@ -29,8 +29,8 @@ if ($redsys) {
 	$trans="0";
 	$url="http://sis-t.redsys.es:25443/sis/realizarPago";
 	$urlOKKO="http://localhost/ApiPhpRedsys/ApiRedireccion/redsysHMAC256_API_PHP_5.2.0/ejemploRecepcionaPet.php";
-  $urlKO="http://192.168.206.130/apps/pedidos/paymentError.php";
-  $urlOK="http://192.168.206.130/apps/pedidos/paymentDone.php";
+  $urlKO="http://192.168.206.230/apps/pedidos/paymentError.php";
+  $urlOK="http://192.168.206.230/apps/pedidos/paymentDone.php";
 	$id=sprintf("%012d", $_COOKIE['orderNumber']);
 	$amount=euroToCent($money);
   $card = 'C';
