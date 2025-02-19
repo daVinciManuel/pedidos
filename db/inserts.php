@@ -66,6 +66,8 @@ function insertIntoOrders($orderNumber, $orderDate, $requiredDate, $shippedDate,
 
 function insertIntoOrderDetails($orderNumber, $productCode, $quantity, $priceEach, $orderLineNumber)
 {
+
+    $priceEach = floatval($priceEach);
     $insertDone = false;
     $conn = connect();
     try {
@@ -102,7 +104,7 @@ function insertIntoPayments($customerNumber, $checkNumber, $paymentDate, $amount
         $stmt = $conn->prepare($query);
         $stmt->bindParam(':customerNumber', $customerNumber);
         $stmt->bindParam(':checkNumber', $checkNumber);
-        $stmt->bindParam(':paymentDate', $quantity);
+        $stmt->bindParam(':paymentDate', $paymentDate);
         $stmt->bindParam(':amount', $amount);
         $stmt->execute();
         $conn->commit();
@@ -114,4 +116,3 @@ function insertIntoPayments($customerNumber, $checkNumber, $paymentDate, $amount
     $conn = null;
     return $insertDone;
 }
-

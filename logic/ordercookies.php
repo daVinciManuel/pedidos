@@ -1,7 +1,7 @@
 <?php
 if(isset($_POST['product'])){
     $maxQuantity = getQuantity($_POST['product']);
-    if (isset($_COOKIE[$productCode])) {
+    if (isset($_COOKIE[$_POST['product']])) {
         $requestQuantity = $_COOKIE[$_POST['product']] + $_POST['cantidad'];
     } else {
         $requestQuantity = $_POST['cantidad'];

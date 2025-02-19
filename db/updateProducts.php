@@ -1,13 +1,15 @@
 <?php
+
 require_once "./db/connect.php";
-function updateProductsLeft($productCode,$quantity){
+function updateProductsLeft($productCode, $quantity)
+{
     $updateDone = false;
     $conn = connect();
     try {
         $conn->beginTransaction();
         //la tabla esta declarada en lowercase en la base de datos
-  $query = 'UPDATE products SET quantityInStock='.$quantity.' WHERE productCode="'.$productCode.'";'
-  $stmt = $conn->prepare($query);
+        $query = 'UPDATE products SET quantityInStock='.$quantity.' WHERE productCode="'.$productCode.'";';
+        $stmt = $conn->prepare($query);
         $stmt->execute();
         $conn->commit();
         $updateDone = true;

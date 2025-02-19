@@ -1,8 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <?php require_once './db/connect.php'; ?>
+    <?php require_once './db/queries.php'; ?>
     <?php require_once "./logic/checkAccToken.php"; ?>
     <?php require_once "./logic/logout.php"; ?>
+
     <?php include "./view/metatags.php"; ?>
     <?php include "./view/styles.php"; ?>
 	<title>Web Pedidos</title>
@@ -15,8 +18,7 @@
       <ul><a href="./pe_altaped.php">Hacer pedido</a></ul>
 
 <?php
-      $date = date('Y-m-d');
-    var_dump($date);
+
     ?>
 	</main>
 </body>

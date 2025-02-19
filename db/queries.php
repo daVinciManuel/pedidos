@@ -1,6 +1,5 @@
 <?php
 
-require "./db/connect.php";
 function userExists($username)
 {
     // consulta cuantos registros hay con el nombre de usuario en {tabla:customers columna:customerNumber	}
@@ -49,17 +48,41 @@ function getPasswordHashed($user)
     $conn = null;
     return $passwordHashed;
 }
-function getUsername($contactFirstName, $contactLastName)
+function getPassword($contactFirstName)
 {
     $conn = connect();
 
-    $query = "SELECT customerNumber FROM customers WHERE contactFirstName='".$contactFirstName."' AND contactLastName='".$contactLastName."';";
+    $query = "SELECT contactLastName FROM customers WHERE contactFirstName=:contactFirstName;";
     $stmt = $conn->prepare($query);
+    $stmt->bindParam(':contactFirstName',$contactFirstName);
     $stmt->execute();
     $username = $stmt->fetchColumn();
-
     $conn = null;
     return $username;
+}
+function getUsername($contactFirstName)
+{
+    $conn = connect();
+
+    $query = "SELECT customerNumber FROM customers WHERE contactFirstName=:contactFirstName;";
+    $stmt = $conn->prepare($query);
+    $stmt->bindParam(':contactFirstName',$contactFirstName);
+    $stmt->execute();
+    $username = $stmt->fetchColumn();
+    $conn = null;
+    return $username;
+}
+function getFirstName($username)
+{
+    $conn = connect();
+
+    $query = "SELECT contactFirstName FROM customers WHERE customerNumber='". $username."';";
+    $stmt = $conn->prepare($query);
+    $stmt->execute();
+    $firstName = $stmt->fetchColumn();
+
+    $conn = null;
+    return $firstName;
 }
 function getPrice($productCode)
 {
@@ -70,6 +93,20 @@ function getPrice($productCode)
     $productPrice = $stmt->fetchColumn();
     $conn = null;
     return $productPrice;
+}
+function selectAllCustomers()
+{
+    $conn = connect();
+    $stmt = $conn->prepare("SELECT customerNumber, customerFirstName FROM customers;");
+    $stmt->execute();
+    $stmt->setFetchMode(PDO::FETCH_ASSOC);
+    $rawResult = $stmt->fetchAll();
+
+    foreach ($rawResult as $r) {
+        $arr[$r["customerNumber"]] = $r["customerFirstName"];
+    }
+    return($arr);
+    $conn = null;
 }
 function selectAllProducts()
 {
@@ -94,7 +131,8 @@ function getOrderNumber()
     $lastOrderNumber = $stmt->fetchColumn();
     $newOrderNumber = $lastOrderNumber + 1;
     $conn = null;
-    return $newOrderNumber;
+    //return $newOrderNumber;
+    return rand(100000,199999);
 }
 function getQuantity($productCode)
 {
@@ -119,14 +157,14 @@ function getProductName($productCode)
 function getCheckNumber()
 {
     $conn = connect();
-    $query = "SELECT max(checkNumber) FROM payments WHERE checkNumber LIKE 'AA%;'";
+    $query = "SELECT max(checkNumber) FROM payments WHERE checkNumber LIKE 'AA%';";
     $stmt = $conn->prepare($query);
     $stmt->execute();
     $lastCheckNumber = $stmt->fetchColumn();
     if ($lastCheckNumber == null) {
         $newCheckNumber = 'AA00001';
     } else {
-        $newCheckNumber = $lastCheckNumber + 1;
+        $newCheckNumber = 'AA' . sprintf("%05d", (strval(intval(substr($lastCheckNumber, 2)) + 1)));
     }
 
     $conn = null;

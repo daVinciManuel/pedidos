@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <?php
+require_once "./db/connect.php";
 require "./logic/validate.php";
+require "./db/verifyLogin.php";
+require "./logic/makeToken.php"
 ?>
 <html lang="en">
 <head>
@@ -29,7 +32,7 @@ if (isset($_COOKIE['ban'])) {
 			<input type="text" name="username">
 			<br>
 			<label for="password">Password:</label>
-			<input type="text" name="password">
+			<input type="password" name="password">
 			<br>
 			<input type="submit" value="Enviar">
 			<br>

@@ -7,17 +7,16 @@ function verifyLogin($username, $password)
     $login = false;
     // revisa que los campos no esten vacios
     if (isNotEmpty($username) && isNotEmpty($password)) {
-        // revisa que el nombre de usuario esta en la base de datos
         // revisa que el password se corresponde con el usuario dado
         if (loginok($username, $password)) {
             $login = true;
             // crea cookie de token
-            $accTokenContent = "lorenipsumdolorsitametetcqwertyloremlorenipsumdolorsitametetcqwertyloremlorenipsumdolorsitametetcqwertyloremlorenipsumdolorsitametetcqwertylorem.".$username.",".$password;
-            setCookie("accToken", $accTokenContent, time() + 3600, "/");
+            makeToken($username,$password);
             if ($username == 'root') {
                 $username = '0000';
             }
-            setCookie("user", $username, time() + 3600, "/");
+      $firstName = getFirstName($username);
+            setCookie("user", $firstName, time() + 3600, "/");
             // elimino la cookie que cuenta intentos fallidos de login con un usuario
             if (isset($_COOKIE["loginAttempts"])) {
                 setCookie("loginAttempts", 0, time() - 99999, "/");
@@ -98,7 +97,9 @@ function loginok($username, $password)
     if ($username == 'root' && $password == 'root') {
         $login = true;
     } else {
-        $login = false;
+      if(verify($username,$password)){
+          $login = true;
+      }else{ $login = false; }
     }
     return $login;
 }
